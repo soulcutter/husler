@@ -107,9 +107,7 @@ module Husler
     u = 13 * l * (var_u - REF_U);
     v = 13 * l * (var_v - REF_V);
 
-    tuple[0] = l
-    tuple[1] = u
-    tuple[2] = v
+    tuple[0], tuple[1], tuple[2] = l, u, v
 
     tuple
   end
@@ -127,9 +125,7 @@ module Husler
     x = 0 - (9 * y * var_u) / ((var_u - 4.0) * var_v - var_u * var_v)
     z = (9 * y - (15 * var_v * y) - (var_v * x)) / (3.0 * var_v)
 
-    tuple[0] = x
-    tuple[1] = y
-    tuple[2] = z
+    tuple[0], tuple[1], tuple[2] = x, y, z
 
     tuple
   end
@@ -142,8 +138,7 @@ module Husler
     h = h_rad * 360.0 / 2.0 / PI
     h = h + 360 if h < 0
 
-    tuple[1] = c
-    tuple[2] = h
+    tuple[1], tuple[2] = c, h
 
     tuple
   end
