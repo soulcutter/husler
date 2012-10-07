@@ -31,10 +31,10 @@ module Husler
     result = Float::INFINITY
 
     M.each do |m1, m2, m3|
-			top = ((0.99915 * m1 + 1.05122 * m2 + 1.14460 * m3) * sub2);
-			rbottom = (0.86330 * m3 - 0.17266 * m2);
-			lbottom = (0.12949 * m3 - 0.38848 * m1);
-			bottom = (rbottom * sin_h + lbottom * cos_h) * sub2;
+      top = ((0.99915 * m1 + 1.05122 * m2 + 1.14460 * m3) * sub2);
+      rbottom = (0.86330 * m3 - 0.17266 * m2);
+      lbottom = (0.12949 * m3 - 0.38848 * m1);
+      bottom = (rbottom * sin_h + lbottom * cos_h) * sub2;
 
       LIMITS.each do |t|
         c = (l * (top - 1.05122 * t) / (bottom + 0.17266 * sin_h * t));
@@ -46,11 +46,11 @@ module Husler
   end
 
   def dot_product l1, l2
-      sum = 0
-      for i in 0...l1.size
-          sum += l1[i] * l2[i]
-      end
-      sum
+    sum = 0
+    for i in 0...l1.size
+      sum += l1[i] * l2[i]
+    end
+    sum
   end
 
   def f(t)
@@ -63,7 +63,7 @@ module Husler
   end
 
   def from_linear(c)
-		c <= 0.0031308 ? (12.92 * c) : (1.055 * (c ** (1 / 2.4)) - 0.055)
+    c <= 0.0031308 ? (12.92 * c) : (1.055 * (c ** (1 / 2.4)) - 0.055)
   end
 
   def to_linear(c)
@@ -100,12 +100,12 @@ module Husler
   def xyz_luv(tuple)
     x, y, z = *tuple
 
-		var_u = (4 * x) / (x + (15.0 * y) + (3 * z));
-		var_v = (9 * y) / (x + (15.0 * y) + (3 * z));
+    var_u = (4 * x) / (x + (15.0 * y) + (3 * z));
+    var_v = (9 * y) / (x + (15.0 * y) + (3 * z));
 
-		l = 116 * f(y / REF_Y) - 16;
-		u = 13 * l * (var_u - REF_U);
-		v = 13 * l * (var_v - REF_V);
+    l = 116 * f(y / REF_Y) - 16;
+    u = 13 * l * (var_u - REF_U);
+    v = 13 * l * (var_v - REF_V);
 
     tuple[0] = l
     tuple[1] = u
@@ -119,17 +119,17 @@ module Husler
 
     return tuple.map! { 0.0 } if l == 0
 
-		var_y = f_inv((l + 16) / 116.0)
-		var_u = u / (13.0 * l) + REF_U
-		var_v = v / (13.0 * l) + REF_V
+    var_y = f_inv((l + 16) / 116.0)
+    var_u = u / (13.0 * l) + REF_U
+    var_v = v / (13.0 * l) + REF_V
 
-		y = var_y * REF_Y
-		x = 0 - (9 * y * var_u) / ((var_u - 4.0) * var_v - var_u * var_v)
-		z = (9 * y - (15 * var_v * y) - (var_v * x)) / (3.0 * var_v)
+    y = var_y * REF_Y
+    x = 0 - (9 * y * var_u) / ((var_u - 4.0) * var_v - var_u * var_v)
+    z = (9 * y - (15 * var_v * y) - (var_v * x)) / (3.0 * var_v)
 
-		tuple[0] = x
-		tuple[1] = y
-		tuple[2] = z
+    tuple[0] = x
+    tuple[1] = y
+    tuple[2] = z
 
     tuple
   end
