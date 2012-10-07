@@ -10,13 +10,19 @@ module Husler
   #	Pass in HUSL values and get back RGB values, H ranges from 0 to 360, S and L from 0 to 100.
   #	RGB values will range from 0 to 1.
   def husl_to_rgb(h, s, l)
+    raise ArgumentError.new("h value (#{h}) must be in the range 0..360") unless (0..360).include? h
+    raise ArgumentError.new("s value (#{s}) must be in the range 0..100") unless (0..100).include? s
+    raise ArgumentError.new("l value (#{l}) must be in the range 0..100") unless (0..100).include? l
+
     xyz_rgb(luv_xyz(lch_luv(husl_lch([h, s, l]))))
   end
 
   #	Pass in RGB values ranging from 0 to 1 and get back HUSL values.
   #	H ranges from 0 to 360, S and L from 0 to 100.
   def rgb_to_husl(r, g, b)
-    lch_husl(luv_lch(xyz_luv(rgb_xyz([r, g, b]))))
+    rgb = [r, g, b]
+    raise ArgumentError.new("rgb values (#{r}, #{g}, #{b}) must all be in the range 0..1") if rgb.any? { |v| !(0..1).include? v }
+    lch_husl(luv_lch(xyz_luv(rgb_xyz(rgb))))
   end
 
   private
@@ -83,9 +89,10 @@ module Husler
   end
 
   def xyz_rgb(tuple)
-    tuple.map! do |v|
-      from_linear(dot_product(v, tuple))
+    (0...3).each do |i|
+      tuple[i] = from_linear(dot_product(M[i], tuple))
     end
+    tuple
   end
 
   def rgb_xyz(tuple)
