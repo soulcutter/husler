@@ -32,7 +32,7 @@ module Husler
     sub1 = ((l + 16) ** 3) / 1560896.0
     sub2 = sub1 > 0.008856 ? sub1 : (l / 903.3);
 
-    result = Float::INFINITY
+    result = INFINITY
 
     M.each do |m1, m2, m3|
       top = ((0.99915 * m1 + 1.05122 * m2 + 1.14460 * m3) * sub2);

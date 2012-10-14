@@ -1,6 +1,7 @@
 module Husler
   PI = Math::PI
   #PI = 3.1415926535897932384626433832795
+  INFINITY = +1.0/0 # positive infinity technically
 
   ONE_THIRD = (1.0 / 3.0)
 
