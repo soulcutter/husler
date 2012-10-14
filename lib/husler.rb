@@ -89,8 +89,9 @@ module Husler
   end
 
   def xyz_rgb(tuple)
+    dup_tuple = tuple.dup
     (0...3).each do |i|
-      tuple[i] = from_linear(dot_product(M[i], tuple))
+      tuple[i] = from_linear(dot_product(M[i], dup_tuple))
     end
     tuple
   end
