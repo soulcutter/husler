@@ -1,5 +1,3 @@
-require 'mathn'
-
 require "husler/version"
 require 'husler/constants'
 
