@@ -23,7 +23,27 @@ module Husler
     lch_husl(luv_lch(xyz_luv(rgb_xyz(rgb))))
   end
 
+  def husl_to_hex(h, s, l)
+    rgb_to_hex(husl_to_rgb(h, s, l))
+  end
+
+  def hex_to_husl(hex)
+    rgb_to_husl(*hex_to_rgb(hex))
+  end
+
   private
+
+  def rgb_to_hex(*tuple)
+    "#%02x%02x%02x" % rgb_prepare(tuple)
+  end
+
+  def hex_to_rgb(hex)
+    hex = hex[1..-1] if hex[0] == '#'
+    r = hex[0...2].to_i(16) / 255.0
+    g = hex[2...4].to_i(16) / 255.0
+    b = hex[4...6].to_i(16) / 255.0
+    [r, g, b]
+  end
 
   def max_chroma(l, h)
     hrad = (h / 360.0) * 2.0 * PI
