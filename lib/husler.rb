@@ -24,7 +24,7 @@ module Husler
   end
 
   def husl_to_hex(h, s, l)
-    rgb_to_hex(husl_to_rgb(h, s, l))
+    rgb_to_hex(*husl_to_rgb(h, s, l))
   end
 
   def hex_to_husl(hex)
@@ -33,8 +33,8 @@ module Husler
 
   private
 
-  def rgb_to_hex(*tuple)
-    "#%02x%02x%02x" % rgb_prepare(tuple)
+  def rgb_to_hex(r, g, b)
+    "#%02x%02x%02x" % rgb_prepare([r, g, b])
   end
 
   def hex_to_rgb(hex)
@@ -130,6 +130,10 @@ module Husler
     var_v = (9 * y) / (x + (15.0 * y) + (3 * z));
 
     l = 116 * f(y / REF_Y) - 16;
+
+    # avoids returning NaN when l == 0
+    return [0, 0, 0] if l == 0
+
     u = 13 * l * (var_u - REF_U);
     v = 13 * l * (var_v - REF_V);
 
@@ -166,6 +170,7 @@ module Husler
 
     tuple[1], tuple[2] = c, h
 
+
     tuple
   end
 
@@ -185,6 +190,9 @@ module Husler
   def husl_lch(tuple)
     h, s, l = *tuple
 
+    return [100, 0, h] if l > 99.9999999
+    return [0, 0, h] if l < 0.00000001
+
     max = max_chroma(l, h)
     c = max / 100.0 * s
 
@@ -195,8 +203,12 @@ module Husler
   def lch_husl(tuple)
     l, c, h = *tuple
 
+    return [h, 0, 100] if l > 99.9999999
+    return [h, 0, 0] if l < 0.00000001
+
     max = max_chroma(l, h)
-    s = c / max * 100
+    # some values for `s` go ever so slightly over 100
+    s = [c / max * 100, 100].min
 
     tuple[0], tuple[1], tuple[2] = h, s, l
     tuple
